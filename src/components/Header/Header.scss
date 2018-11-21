@@ -1,0 +1,38 @@
+@import '../../scss/mixins';
+
+.header {
+    min-height: 60px;
+    padding: 0 80px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .3);
+    background-color: #607D8B;
+    margin-bottom: 50px;
+    @include flex(row, space-between);
+
+    &__logo {
+        img {
+            height: 60px;
+        }
+    }
+
+    ul {
+        list-style: none;
+        @include flex;
+
+        li {
+            &:not(:last-child) {
+                margin-right: 30px;
+            }
+
+            a {
+                color: #ffffff;
+                text-transform: uppercase;
+                text-decoration: none;
+                font-weight: 700;
+
+                &:hover {
+                    color: #00d8ff;
+                }
+            }
+        }
+    }
+}
