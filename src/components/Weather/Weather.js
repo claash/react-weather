@@ -4,11 +4,6 @@ import Form from './Form';
 import Info from './Info';
 
 const API_KEY = '136fc1289216818c65293da203a8d841';
-navigator.geolocation.getCurrentPosition(function(position) {
-	console.log(position.coords.latitude, position.coords.longitude);
-	const COORD_LAT = position.coords.latitude;
-	const COORD_LON = position.coords.longitude;
-});
 
 class Weather extends Component {
 	state = {
@@ -17,20 +12,59 @@ class Weather extends Component {
 		country: undefined,
 		sunrise: undefined,
 		sunset: undefined,
-		error: undefined
+		error: undefined,
+		lat: undefined,
+		lon: undefined,
+		current: undefined
 	};
 
-	gettingWeather = async (e) => {
+	getCurrentPosition = (options = {}) => {
+		return new Promise((resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(resolve, reject, options);
+		});
+	};
+
+	gettingWeatherCoords = async () => {
+		const position = await this.getCurrentPosition();
+
+		this.setState({
+			lat: position.coords.latitude,
+			lon: position.coords.longitude
+		});
+
+		const api_url = await fetch(
+			`https://api.openweathermap.org/data/2.5/weather?lat=${
+				this.state.lat
+			}&lon=${this.state.lon}&appid=${API_KEY}&units=metric`
+		);
+
+		const data = await api_url.json();
+
+		this.setState({
+			temp: data.main.temp,
+			tempMin: data.main.temp_min,
+			tempMax: data.main.temp_max,
+			city: data.name,
+			country: data.sys.country,
+			sunrise: data.sys.sunrise,
+			sunset: data.sys.sunset,
+            conditional: data.weather[0].main,
+            current: true,
+			error: undefined
+		});
+	};
+
+	gettingWeather = async e => {
 		e.preventDefault();
 		const city = e.target.elements.city.value;
 
 		if (city) {
-			const api_url_name = await fetch(
+			const api_url = await fetch(
 				`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
 			);
-			const data = await api_url_name.json();
+			const data = await api_url.json();
 
-			if (data.cod === '404') {
+			if (data.cod === "404") {
 				this.setState({
 					city: undefined,
 					error: data.message
@@ -44,7 +78,8 @@ class Weather extends Component {
 					country: data.sys.country,
 					sunrise: data.sys.sunrise,
 					sunset: data.sys.sunset,
-					conditional: data.weather[0].main,
+                    conditional: data.weather[0].main,
+                    current: false,
 					error: undefined
 				});
 			}
@@ -55,17 +90,24 @@ class Weather extends Component {
 				country: undefined,
 				sunrise: undefined,
 				sunset: undefined,
-				error: 'Enter city name'
+				error: "Enter city name"
 			});
 		}
 	};
+
+	componentDidMount() {
+		this.gettingWeatherCoords();
+	}
 
 	render() {
 		return (
 			<div className="weather">
 				<div className="weather__box">
 					<h3>Weather app</h3>
-					<Form getWeather={this.gettingWeather} />
+					<Form
+						gettingWeatherCoords={this.gettingWeatherCoords}
+						getWeather={this.gettingWeather}
+					/>
 					<Info
 						temp={this.state.temp}
 						tempMin={this.state.tempMin}
@@ -75,7 +117,8 @@ class Weather extends Component {
 						sunrise={this.state.sunrise}
 						sunset={this.state.sunset}
 						conditional={this.state.conditional}
-						error={this.state.error}
+                        error={this.state.error}
+						current={this.state.current}
 					/>
 				</div>
 			</div>

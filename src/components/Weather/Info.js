@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 
+import currentSvg from './current.svg';
+
 class Info extends Component {
 	render() {
-		return (
-			<div>
-				{this.props.city && (
-					<div className={'weather__info' + ' ' + (this.props.temp < 0 ? 'cold' : 'hot')}>
+		return <div>
+				{this.props.city && <div className={"weather__info" + " " + (this.props.temp < 0 ? "cold" : "hot")}>
+						{this.props.current}
+						{this.props.current && 
+                            <img className="weather__info-current" src={currentSvg} />
+                        }
 						<div className="weather__info-position">
 							<span>{this.props.city}, </span>
 							<span>{this.props.country}</span>
 						</div>
 						<div className="weather__info-temp">
 							<div className="weather__info-temp__curr">
-								{Math.round(this.props.temp) > 0 && '+'}
+								{Math.round(this.props.temp) > 0 && "+"}
 								{Math.round(this.props.temp)}
 							</div>
 							<div className="weather__info-temp__minMax">
@@ -20,12 +24,12 @@ class Info extends Component {
 								<span>Max: {this.props.tempMax}</span>
 							</div>
 						</div>
-						<div className="weather__info-conditional">{this.props.conditional}</div>
-					</div>
-				)}
+						<div className="weather__info-conditional">
+							{this.props.conditional}
+						</div>
+					</div>}
 				<p className="error">{this.props.error}</p>
-			</div>
-		);
+			</div>;
 	}
 }
 
