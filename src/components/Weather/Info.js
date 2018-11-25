@@ -28,7 +28,9 @@ class Info extends Component {
 							{this.props.conditional}
 						</div>
 						<button onClick={this.props.getForecast}>Weather forecast</button>
-						<Forecast forecast={this.props.forecast} />
+						{this.props.forecast &&
+							<Forecast forecast={this.props.forecast} />
+						}
 					</div>}
 				<p className="error">{this.props.error}</p>
 			</div>;

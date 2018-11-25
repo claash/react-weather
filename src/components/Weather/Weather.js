@@ -30,6 +30,7 @@ class Weather extends Component {
 		const position = await this.getCurrentPosition();
 
 		this.setState({
+			forecast: undefined,
 			lat: position.coords.latitude,
 			lon: position.coords.longitude
 		});
@@ -53,6 +54,7 @@ class Weather extends Component {
 			sunset: data.sys.sunset,
 			conditional: data.weather[0].main,
 			current: true,
+			forecast: undefined,
 			error: undefined
 		});
 	};
@@ -84,6 +86,7 @@ class Weather extends Component {
 					sunset: data.sys.sunset,
 					conditional: data.weather[0].main,
 					current: false,
+					forecast: undefined,
 					error: undefined
 				});
 			}
