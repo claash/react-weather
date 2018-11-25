@@ -1,0 +1,39 @@
+@import '../../scss/mixins';
+
+.weather {
+    &__forecast {
+        width: 100%;
+        padding: 0;
+        @include flex(column, center, flex-start);
+
+        &-day {
+            width: 100%;
+            @include flex(row, space-between);
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+                border-bottom: 1px solid #ffffff;
+                padding-bottom: 10px;
+            }
+
+            &__date {
+                @include flex(column);
+
+                span {
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    font-size: 26px
+                }
+            }
+
+            &__temp {
+                font-size: 14px;
+                @include flex(column);
+
+                label {
+                    text-transform: uppercase;
+                }
+            }
+        }
+    }
+}

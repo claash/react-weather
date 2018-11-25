@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import currentSvg from './current.svg';
+import Forecast from './Forecast';
 
 class Info extends Component {
 	render() {
@@ -27,6 +27,8 @@ class Info extends Component {
 						<div className="weather__info-conditional">
 							{this.props.conditional}
 						</div>
+						<button onClick={this.props.getForecast}>Weather forecast</button>
+						<Forecast forecast={this.props.forecast} />
 					</div>}
 				<p className="error">{this.props.error}</p>
 			</div>;

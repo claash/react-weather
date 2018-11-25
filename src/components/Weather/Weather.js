@@ -9,12 +9,14 @@ class Weather extends Component {
 	state = {
 		temp: undefined,
 		city: undefined,
+		city_id: undefined,
 		country: undefined,
 		sunrise: undefined,
 		sunset: undefined,
 		error: undefined,
 		lat: undefined,
 		lon: undefined,
+		forecast: undefined,
 		current: undefined
 	};
 
@@ -45,11 +47,12 @@ class Weather extends Component {
 			tempMin: data.main.temp_min,
 			tempMax: data.main.temp_max,
 			city: data.name,
+			city_id: data.id,
 			country: data.sys.country,
 			sunrise: data.sys.sunrise,
 			sunset: data.sys.sunset,
-            conditional: data.weather[0].main,
-            current: true,
+			conditional: data.weather[0].main,
+			current: true,
 			error: undefined
 		});
 	};
@@ -75,11 +78,12 @@ class Weather extends Component {
 					tempMin: data.main.temp_min,
 					tempMax: data.main.temp_max,
 					city: data.name,
+					city_id: data.id,
 					country: data.sys.country,
 					sunrise: data.sys.sunrise,
 					sunset: data.sys.sunset,
-                    conditional: data.weather[0].main,
-                    current: false,
+					conditional: data.weather[0].main,
+					current: false,
 					error: undefined
 				});
 			}
@@ -93,6 +97,15 @@ class Weather extends Component {
 				error: "Enter city name"
 			});
 		}
+	};
+
+	weatherForecast = async () => {
+		const api_url = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?id=${this.state.city_id}&appid=${API_KEY}&units=metric&cnt=7`);
+		const data = await api_url.json();
+
+		this.setState({
+			forecast: data.list
+		});
 	};
 
 	componentDidMount() {
@@ -117,8 +130,10 @@ class Weather extends Component {
 						sunrise={this.state.sunrise}
 						sunset={this.state.sunset}
 						conditional={this.state.conditional}
-                        error={this.state.error}
+						error={this.state.error}
 						current={this.state.current}
+						getForecast={this.weatherForecast}
+						forecast={this.state.forecast}
 					/>
 				</div>
 			</div>

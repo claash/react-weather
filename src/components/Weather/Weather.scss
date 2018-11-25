@@ -74,10 +74,26 @@
 		padding: 20px;
 		border-radius: 5px;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, .3);
-		height: 200px;
+		min-height: 200px;
         width: 200px;
         position: relative;
 		@include flex(column, space-around);
+
+		> button {
+			background-color: #ffffff;
+			border: none;
+			border-radius: 2px;
+			margin: 10px 0;
+			height: 25px;
+			text-transform: uppercase;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, .3);
+			cursor: pointer;
+			outline: none;
+
+			&:active {
+				box-shadow: none;
+			}
+		}
 
 		&.cold {
 			background-color: #0288d1;
@@ -116,6 +132,11 @@
             position: absolute;
             top: 10px;
             right: 10px;
-        }
+		}
+		
+		&-conditional {
+			text-transform: uppercase;
+			font-weight: 700;
+		}
 	}
 }
